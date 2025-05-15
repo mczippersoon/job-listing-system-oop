@@ -1,4 +1,5 @@
 <?php
+      session_start();
         require_once 'Database/Dbconnection.php';
         require_once 'users.php';
 

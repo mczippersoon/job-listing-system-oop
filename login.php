@@ -15,17 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errorMessage = "All fields are required!";
     } else {
         // Search for user by email
-        $result = $handler->searchByEmail($email); // fixed
+        $result = $handler->searchByEmail($email,);
 
         $user = $result; // result is already an array (or false)
         
         if (!empty($user)) {
             // ✅ If user exists, verify password
-            if (password_verify($password, $user['password'])) {
-                $_SESSION['user'] = $user; 
-                
-               //echo "Login successful!";
-        
+              if (password_verify($password, $user['password'])) {
+                  $_SESSION['user'] = $user;
+                  
+                  // Store the profile image in session
+                  $_SESSION['profile_picture'] = $user['profile_picture'];
+                   
                switch ($user['role']) {
                 case 'admin':
                     header("Location: Admin/dashboard.php");

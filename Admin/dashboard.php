@@ -9,11 +9,14 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
     exit();
 }
 
+$userName = $_SESSION['user']['name'] ?? 'Admin';
+
 // Set variables BEFORE including the header
-$userName = $_SESSION['user']['name'] ?? '';
-$userImg = $_SESSION['user']['profile_picture'] ?? '../img/default.png';
+$profilePath = $_SESSION['user']['profile_picture'] ?? 'uploads/default.png';
+$userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../uploads/' . $profilePath;
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
