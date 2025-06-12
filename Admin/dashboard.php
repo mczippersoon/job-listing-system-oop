@@ -12,10 +12,16 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 $userName = $_SESSION['user']['name'] ?? 'Admin';
 
 // Set variables BEFORE including the header
-$profilePath = $_SESSION['user']['profile_picture'] ?? 'uploads/default.png';
-$userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../uploads/' . $profilePath;
+$profilePath = $_SESSION['user']['profile_picture'] ?? '';
+
+if (empty($profilePath) || !file_exists('../' . $profilePath)) {
+    $userImg = '../uploads/default.jpg';
+} else {
+    $userImg = '../' . ltrim($profilePath, '/');
+}
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -97,6 +103,7 @@ $userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../u
             </li>
         </ul>
         <!-- End of Sidebar -->
+         
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -121,17 +128,19 @@ $userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../u
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $userName ?></span>
-                                <img class="img-profile rounded-circle" src="<?= $userImg ?>" style="object-fit: cover; width: 40px; height: 40px; border: 2px solid #ddd; background-color:rgb(241, 235, 235);">
-
-
+                             <img src="<?= htmlspecialchars($userImg) . '?' . time() ?>"
+                                alt="Profile"
+                                class="img-profile rounded-circle"
+                                width="40" height="40"
+                                onerror="this.onerror=null;this.src='../uploads/default.jpg';">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
+                            <a class="dropdown-item" href="../profile.php">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -139,7 +148,6 @@ $userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../u
                                 </a>
                             </div>
                         </li>
-
                     </ul>
 
                 </nav>
@@ -222,53 +230,7 @@ $userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../u
                 </div>
             </div>
         </div>
-
     </div>
-
-    <!-- Charts Row -->
-    <div class="row">
-
-        <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Job Post Trends</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">User Roles</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="chart-pie pt-4">
-                        <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2"><i class="fas fa-circle text-primary"></i> Admin</span>
-                        <span class="mr-2"><i class="fas fa-circle text-success"></i> Employer</span>
-                        <span class="mr-2"><i class="fas fa-circle text-info"></i> Job Seeker</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /.container-fluid -->
-            </div>
-            <!-- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">

@@ -13,9 +13,15 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'seeker') {
 
 $userName = $_SESSION['user']['name'] ?? 'JobSeeker';
 
-// Set variables BEFORE including the header
 $profilePath = $_SESSION['user']['profile_picture'] ?? 'uploads/default.png';
-$userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../uploads/' . $profilePath;
+
+// Check if file exists relative to current file location
+if (!empty($profilePath) && file_exists(__DIR__ . '/../' . $profilePath)) {
+    $userImg = '../' . $profilePath;
+} else {
+    $userImg = '../uploads/default.png';
+}
+    
 
 ?>
 <!DOCTYPE html>
@@ -109,7 +115,8 @@ $userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../u
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $userName ?></span>
-                                <img class="img-profile rounded-circle" src="<?= $userImg ?>" style="object-fit: cover; width: 40px; height: 40px; border: 2px solid #ddd; background-color: #f0f0f0;">
+                               <img src="<?= htmlspecialchars($userImg) . '?' . time() ?>" width="40" height="40" style="border-radius: 50%;" alt="Profile" />
+
 
 
                             </a>
@@ -212,51 +219,6 @@ $userImg = strpos($profilePath, 'uploads/') === 0 ? '../' . $profilePath : '../u
         </div>
 
     </div>
-
-    <!-- Charts Row -->
-    <div class="row">
-
-        <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Job Post Trends</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">User Roles</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="chart-pie pt-4">
-                        <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2"><i class="fas fa-circle text-primary"></i> Admin</span>
-                        <span class="mr-2"><i class="fas fa-circle text-success"></i> Employer</span>
-                        <span class="mr-2"><i class="fas fa-circle text-info"></i> Job Seeker</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /.container-fluid -->
-            </div>
-            <!-- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">

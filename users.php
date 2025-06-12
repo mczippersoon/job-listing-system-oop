@@ -9,26 +9,44 @@ class User {
         $this->conn = $db;
     }
 
-    public function register($name, $email, $password, $role, $imagePath)
-    {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        public function register($name, $email, $password, $role, $imagePath)
+        {
+            if ($this->emailExists($email)) {
+                return "The email address is already in use.";
+            }
 
-        $sql = "INSERT INTO users (name, email, password, role, profile_picture) VALUES (:name, :email, :password, :role, :profile_picture)";
-        $stmt = $this->conn->prepare($sql);
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $hashedPassword);
-        $stmt->bindParam(':role', $role);
-        $stmt->bindParam(':profile_picture', $imagePath);
+            $sql = "INSERT INTO users (name, email, password, role, profile_picture) 
+                    VALUES (:name, :email, :password, :role, :profile_picture)";
+            $stmt = $this->conn->prepare($sql);
 
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return "Error: " . implode(", ", $stmt->errorInfo());
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':role', $role);
+            $filename = basename($imagePath); // get "default.jpg"
+            $stmt->bindParam(':profile_picture', $filename);
+
+
+            try {
+                if ($stmt->execute()) {
+                    return true;
+                }
+            } catch (PDOException $e) {
+                return "Error: " . $e->getMessage();
+            }
+
+            return "Registration failed.";
         }
-    }
 
+    public function emailExists($email) {
+        $sql = "SELECT id FROM users WHERE email = :email";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
 
     public function login($email, $password) {
         $sql = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";

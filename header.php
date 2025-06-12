@@ -1,11 +1,18 @@
 <?php
 session_start();
-?>
 
-<header style="padding: 10px; background-color: #f0f0f0;">
-  <?php if (isset($_SESSION['profile_image'])): ?>
-    <img src="<?= $_SESSION['profile_image'] ?>" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%;">
-  <?php else: ?>
-    <img src="upload/default.png" alt="Default Profile" style="width: 40px; height: 40px; border-radius: 50%;">
-  <?php endif; ?>
-</header>
+$userName = $_SESSION['user']['name'] ?? 'Admin';
+$profilePicture = $_SESSION['user']['profile_picture'] ?? 'uploads/default.png';
+
+// Prevent duplicate 'uploads/uploads'
+if (strpos($profilePicture, 'uploads/') === 0) {
+    $profilePath = $profilePicture;
+} else {
+    $profilePath = 'uploads/' . $profilePicture;
+}
+
+// Optional: If you're inside an /Admin folder, you may need to go up one level
+if (strpos($_SERVER['SCRIPT_NAME'], '/admin/') !== false) {
+    $profilePath = '../' . $profilePath;
+}
+?>

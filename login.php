@@ -24,8 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               if (password_verify($password, $user['password'])) {
                   $_SESSION['user'] = $user;
                   
-                  // Store the profile image in session
-                  $_SESSION['profile_picture'] = $user['profile_picture'];
+                  $_SESSION['user'] = [
+                      'id' => $user['id'],
+                      'name' => $user['name'],
+                      'email' => $user['email'],
+                      'role' => $user['role'],
+                      'profile_picture' => $user['profile_picture'] ? '/uploads/' . $user['profile_picture'] : '/uploads/default.jpg',
+
+                  ];
+
                    
                switch ($user['role']) {
                 case 'admin':

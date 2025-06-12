@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -190,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 
 
-    <!-- <script>
+    <script>
            $(document).ready(function() {
                 // When clicking on the edit button
                 $(document).on('click', '.editExample', function() {
@@ -230,41 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             });
 
-    </script> -->
-     <!-- <div class="card mt-4" id="editForm" style="display:none;">
-        <div class="edit-job-form">
-            <h2 class="text-center">Edit Job</h2>
-            <form method="POST" action="">
-                <input type="hidden" name="id" id="edit-id">
-                <div class="mb-3">
-                    <label class="form-label">Job Title</label>
-                    <input type="text" name="title" class="form-control" value="<?= htmlspecialchars($job['title']); ?>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    <textarea name="description" class="form-control" rows="4" required><?= htmlspecialchars($job['description']); ?></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Company</label>
-                    <input type="text" name="company" class="form-control" value="<?= htmlspecialchars($job['company']); ?>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Location</label>
-                    <input type="text" name="location" class="form-control" value="<?= htmlspecialchars($job['location']); ?>" required>
-                </div>
-
-                <button type="submit" class="btn btn-success ">Update Job</button>
-                <a href="javascript:void(0)" id="cancelEdit" class="btn btn-secondary">Cancel</a>
-            </form>
-        </div>                        
-     </div> -->
-    <!-- End of Edit Form -->
-     
-</div>
-
+    </script> 
+    
 <!-- /.container-fluid -->
             </div>
             <!-- End of Main Content -->
@@ -310,17 +277,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script> -->
+
     <script src="../js/jquery.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
-    <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
+
     <script src="../js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <!-- <script src="vendor/jquery-easing/jquery.easing.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script> -->
-
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
 
@@ -330,46 +290,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Page level custom scripts -->
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
-
-    <!-- Show Edit Form -->
-    <!-- <script>
-        document.querySelectorAll('.editFormButton').forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault();
-
-                const jobId = this.getAttribute('data-id');
-
-                fetch(`jobs.php?id=${jobId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Populate the form
-                        document.querySelector('input[name="title"]').value = data.title;
-                        document.querySelector('textarea[name="description"]').value = data.description;
-                        document.querySelector('input[name="company"]').value = data.company;
-                        document.querySelector('input[name="location"]').value = data.location;
-
-                        // Set job ID to hidden input if needed
-                        if (!document.querySelector('input[name="job_id"]')) {
-                            const hidden = document.createElement('input');
-                            hidden.type = 'hidden';
-                            hidden.name = 'job_id';
-                            hidden.value = data.id;
-                            document.querySelector('form').appendChild(hidden);
-                        } else {
-                            document.querySelector('input[name="job_id"]').value = data.id;
-                        }
-
-                        // Show the form
-                        document.getElementById('editForm').style.display = 'block';
-                    });
-            });
-        });
-
-        document.getElementById('cancelEdit').addEventListener('click', function() {
-            document.getElementById('editForm').style.display = 'none';
-        });
-    </script> -->
-
 
 </body>
 

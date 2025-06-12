@@ -3,7 +3,7 @@ class Dbconnection {
     private $host = "localhost";
     private $db_name = "job-listing-system";
     private $username = "root";
-    private $password = "";
+    private $password = "09110261041";
     protected $conn;
 
     public function __construct() {

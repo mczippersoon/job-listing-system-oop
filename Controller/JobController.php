@@ -11,7 +11,7 @@ class JobController
     public function __construct()
     {
         session_start();
-        $db = new Database();
+        $db = new DbConnection();
         $this->job = new Job($db->connect());
         $this->userRole = $_SESSION['role'] ?? null;
         $this->userId = $_SESSION['user_id'] ?? null;

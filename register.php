@@ -1,59 +1,43 @@
 <?php
-      session_start();
-        require_once 'Database/Dbconnection.php';
-        require_once 'users.php';
+session_start();
+require_once 'Database/Dbconnection.php';
+require_once 'users.php';
 
-        $db = new Dbconnection();
-        $conn = $db->getConnection();
-        $user = new User($conn);
+$db = new Dbconnection();
+$conn = $db->getConnection();
+$user = new User($conn);
 
-        $successMessage = "";
-        $errorMessage = "";
+$successMessage = "";
+$errorMessage = "";
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
-            $name     = $_POST['name'];
-            $email    = $_POST['email'];
-            $password = $_POST['password'];
-            $role     = $_POST['role'];
-        
-            // Handle image upload
-            $targetDir = "uploads/";
-            if (!is_dir($targetDir)) {
-                mkdir($targetDir, 0777, true); // create folder if not exist
-            }
-        
-            $fileName = basename($_FILES["profile_image"]["name"]);
-            $uniqueFileName = time() . "_" . $fileName;
-            $targetFilePath = $targetDir . $uniqueFileName;
-            $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
-        
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
-            if (in_array($fileType, $allowedTypes)) {
-                if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $targetFilePath)) {
-                    // Pass image path to register function
-                    $result = $user->register($name, $email, $password, $role, $targetFilePath);
-                } else {
-                    $errorMessage = "Failed to upload image.";
-                }
-            } else {
-                $errorMessage = "Only JPG, JPEG, PNG, and GIF files are allowed.";
-            }
-        
-            if (isset($result)) {
-                if ($result === true) {
-                    $successMessage = "Registration successful! Redirecting to login page...";
-                    echo "<script>
-                            setTimeout(function() {
-                                window.location.href = 'login.php';
-                            }, 1000); // 3-second delay
-                          </script>";
-                } else {
-                    $errorMessage = $result;
-                }
-            }
-        }        
-    ?>
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
+    $name     = $_POST['name'];
+    $email    = $_POST['email'];
+    $password = $_POST['password'];
+    $role     = $_POST['role'];
+    
 
+    // Set default profile picture path (make sure this file exists)
+    $defaultProfile = "uploads/default.jpg";
+
+    // Register user with default profile picture
+    $result = $user->register($name, $email, $password, $role, $defaultProfile);
+
+    if (isset($result)) {
+        if ($result === true) {
+            $successMessage = "Registration successful! Redirecting to login page...";
+            echo "<script>
+                    setTimeout(function() {
+                        window.location.href = 'login.php';
+                    }, 1000); // 1-second delay
+                  </script>";
+        } else {
+            $errorMessage = $result;
+        }
+    }
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -132,7 +116,7 @@
     <div class="alert alert-danger"><?= $errorMessage ?></div>
   <?php endif; ?>
 
-  <form method="POST" action="" enctype="multipart/form-data">
+  <form method="POST" action="">
     <div class="mb-3">
       <label class="form-label">Full Name</label>
       <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
@@ -154,11 +138,6 @@
         <option value="seeker">Job Seeker</option>
         <option value="employer">Employer</option>
       </select>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Profile Picture</label>
-      <input type="file" name="profile_image" class="form-control" accept="image/*" required>
     </div>
 
     <button type="submit" name="register" class="btn btn-primary w-100">Register</button> 
